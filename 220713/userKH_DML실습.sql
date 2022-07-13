@@ -231,3 +231,19 @@ WHERE MANAGER_ID IS NULL AND DEPT_CODE IS NULL;
 SELECT *
 FROM EMPLOYEE
 WHERE DEPT_CODE IS NULL AND BONUS IS NOT NULL;
+
+
+--정렬 ORDER BY
+--SELECT한 컬럼에 대해 정렬을 할 때 사용하는 구문
+--SELECT 구문의 가장 마지막에 작성(★) 실행순서도 가장 마지막에 수행됨.
+--ASC : 오름차순  // DESC: 내림차순
+--DATE : 옛날->최신 // 최신 -> 옛날
+--NULL : NULL값이 아래로 // NULL값이 위로
+
+--여러 칼럼을 기준으로 정렬시 먼저 쓴 칼럼부터 정렬 그다음 정렬
+
+SELECT * FROM EMPLOYEE
+ORDER BY BONUS DESC;
+
+--셀렉트의 명령어가 실행되는 순서
+--FROM-WHERE-(GROUP BY - HAVING) - SELECT - ORDER BY
