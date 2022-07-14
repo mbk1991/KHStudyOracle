@@ -1,0 +1,74 @@
+--오라클 함수
+SELECT SYSDATE FROM DUAL;
+SELECT LENGTH ('HELLO') FROM DUAL;
+SELECT LENGTH(EMAIL) FROM EMPLOYEE;
+
+--문자열의 길이, 문자열의 바이트 길이
+--LENGTH, LENGTHB
+
+SELECT EMP_NAME, LENGTH(EMP_NAME),LENGTHB(EMP_NAME),
+EMAIL,LENGTH(EMAIL),LENGTHB(EMAIL)
+FROM EMPLOYEE;
+
+--문자열의 위치
+--INSTR, INSTRB
+--INSTR(데이터,STR(찾으려는문자열),1(앞에서부터찾을지 뒤에서부터찾을지),1(N번째 찾은 값의 위치))
+SELECT INSTR('Hello World Hi High','H',1,1)
+,INSTR('Hello World Hi High','H',-1,1)
+,INSTR('Hello World Hi High','H',-1,2)
+FROM DUAL;
+
+-- EMPLOYEE테이블에서 EMAIL 컬럼의 문자열 중 '@'의 위치를 구하시오
+SELECT INSTR(EMAIL,'@',1,1)
+FROM EMPLOYEE;
+
+SELECT INSTR(EMAIL,'@')  -- 기본값은 생략가능
+FROM EMPLOYEE;
+
+--LPAD/RPAD
+--LTRIM/RTRIM
+--TRIM
+SELECT EMAIL,RPAD(EMAIL, 20, '#'), LPAD(EMAIL,20,'#'),LPAD(EMAIL,10) FROM EMPLOYEE;
+
+SELECT '             KH' FROM DUAL;
+SELECT LTRIM('             KH',' ') FROM DUAL;
+SELECT LTRIM('00001234', '1') FROM DUAL;
+SELECT RTRIM('12340000', '0'),LTRIM('123KH123','123') FROM DUAL;
+
+SELECT 'ACABACCKH', LTRIM('ACABACCKH','ACABACC')  --두번째 파라미터는 집합.'ABC'만 써도 결과는 같음
+FROM DUAL;
+
+SELECT TRIM(' KH   ') FROM DUAL;
+
+SELECT LTRIM('45313456789','1345') FROM DUAL; --집합에 없는 값을 만나면 스탑
+SELECT TRIM('    KH    '), TRIM('Z' FROM 'ZZZKHZZZ') FROM DUAL;
+SELECT TRIM(LEADING 'Z' FROM 'ZZZKHZZZ'), TRIM(TRAILING 'Z' FROM 'ZZZKHZZZ')
+FROM DUAL;
+
+
+-- 실습 문제 1
+-- Hello KH Java 문자열을 Hello KH 가 출력되게 하여라.
+SELECT RTRIM('Hello KH Java','Java ') FROM DUAL;
+
+
+
+-- 실습 문제 2
+-- Hello KH Java 문자열을 KH Java 가 출력되게 하여라.
+SELECT LTRIM('Hello KH Java','Hello')
+FROM DUAL;
+
+
+-- 실습 문제 3 (TRIM으로 해보세요)
+-- DEPARTMENT 테이블에서 DEPT_TITLE을 출력하여라
+-- 이때, 마지막 부 글자를 빼고 출력되도록 하여라 / ex)회계관리부 -> 회계관리
+SELECT DEPT_TITLE, RTRIM(DEPT_TITLE,'부')
+FROM DEPARTMENT;
+
+
+-- 실습 문제 4
+-- 다음문자열에서 앞뒤 모든 숫자를 제거하세요.
+-- '982341678934509hello89798739273402'
+SELECT RTRIM(LTRIM('982341678934509hello89798739273402','0123456789'),'0123456789')
+FROM DUAL;
+
+
