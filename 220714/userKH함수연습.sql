@@ -420,9 +420,6 @@ WHERE SUBSTR(EMP_NO,8,1) = 1 AND BONUS IS NULL ;
 -- WHERE EMP_NO LIKE '%-1%' AND BONUS IS NULL;
 
 
-
-
-
 -- @함수 최종실습문제
 --1. 직원명과 이메일 , 이메일 길이를 출력하시오
 --		  이름	    이메일		이메일길이
@@ -442,7 +439,6 @@ SELECT EMP_NAME"이름",
 FROM EMPLOYEE;
 
 
-
 --3. 60년대에 태어난 직원명과 년생, 보너스 값을 출력하시오. 그때 보너스 값이 null인 경우에는 0 이라고 출력 되게 만드시오
 --	    직원명    년생      보너스
 --	ex) 선동일	    1962	    0.3
@@ -454,12 +450,24 @@ SELECT EMP_NAME"이름",
 FROM EMPLOYEE
 WHERE EMP_NO LIKE '6%';
 
+SELECT  EMP_NAME,
+            EXTRACT(YEAR FROM TO_DATE(SUBSTR(EMP_NO,1,6)))"년생",
+            CASE WHEN BONUS IS NULL THEN 0
+FROM EMPLOYEE
+WHERE EXTRACT(YEAR FROM TO_DATE(SUBSTR(EMP_NO,1,6))) BETWEEN '1960' AND '1970';
+
+SELECT TO_DATE(SUBSTR(EMP_NO,1,2),'RR')
+FROM EMPLOYEE;
+
 
 --4. '010' 핸드폰 번호를 쓰지 않는 사람의 수를 출력하시오 (뒤에 단위는 명을 붙이시오)
 --	   인원
 --	ex) 3명
 
 --이건 못 하는 듯
+SELECT EMP_NAME
+FROM EMPLOYEE
+WHERE PHONE NOT LIKE '010%';
 
 
 --5. 직원명과 입사년월을 출력하시오 
