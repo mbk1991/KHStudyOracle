@@ -1,0 +1,11 @@
+--CHOON UNIVERSITY 실습문제 풀기
+SELECT * FROM TAB;
+DESC  TB_DEPARTMENT;
+
+--1.학과 이름과 계열을 표시하시오
+SELECT DEPARTMENT_NAME"학과명", CATEGORY"계열"
+FROM  TB_DEPARTMENT;
+
+--2. 학과의 학과 정원 출력
+SELECT DEPARTMENT_NAME||'의 정원은'||CAPACITY||'명 입니다'"학과별 정원"
+FROM TB_DEPARTMENT;
