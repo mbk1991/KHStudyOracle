@@ -245,7 +245,49 @@ FROM (SELECT EMPNO,ENAME FROM EMP ORDER BY MGR);
 --GROUP BY 설정 시 그룹핑기준 칼럼과 숫자형 데이터만 사용 가능!!!
 --GROUP BY 는 집계함수와 함께 써야함!!!
 
+-- 7.JOIN
+-- 조인: 두 개 이상의 테이블들을  연결해 데이터를 출력하는 것. 
+-- 관계형 데이터베이스의 가장 큰 장점이자 핵심기능!!!
+-- PK와 FK 값의 연관에 의한 일반적인 조인 뿐 아니라 PK,FK관계가 없어도 논리적인 값들의 연관만으로
+-- 조인이 성립될 수 있다.
+-- 3개의 테이블을 조인 시 특정 2개의 테이블만 먼저 조인 처리되고 조인의 결과인
+--중간데이터와 나머지 테이블이 다음 차례로 조인이 된다. 4개 이상이 경우에도 
+-- 2개가 조인되고 한 개가 추가 조인되고 또 다른 한 개가 추가 조인되는 식으로 진행된다.
+-- (((A JOIN D) JOIN C) JOIN B) 
 
+--EQUI JOIN 등가 JOIN
+-- 두 개의 테이블 간의 칼럼 값들이 서로 정확하게 일치하는 경우 사용되는 방법.
+--대부분 PK ↔ FK의 관계를 기반으로 한다.
+--JOIN의 조건은 WHERE절에 = 연산자로 기술. (전통적인 방식)
+--FROM 절의 ON절 USING 을 이용하는 방식 (ANSI/ISO SQL 표준방식)
+
+--컬럼명 앞에는 테이블명(또는 ALIAS)를 붙여서 사용하는 것이 좋다.
+-- 가독성과 유지보수성을 높이는 방법임.
+--INNER JOIN : 조인 조건에 맞는 데이터만 출력한다.
+
+SELECT PLAYER.PLAYER_NAME, PLAYER.BACK_NO, PLAYER.TEAM_ID
+    ,TEAM.TEAM_NAME, TEAM.REGION_NAME
+FROM PLAYER, TEAM
+WHERE TEAM.TEAM_ID = PLAYER.TEAM_ID;
+
+--FROM절에 알리아스를 사용하여 개발생산성을 높이고 실수를 방지한다.
+
+SELECT P.PLAYER_NAME,
+       P.BACK_NO,
+       P.TEAM_ID,
+       T.TEAM_NAME,
+       T.REGION_NAME,
+       P.POSITION
+FROM PLAYER P, TEAM T
+WHERE P.TEAM_ID = T.TEAM_ID AND
+        POSITION = 'GK'
+ORDER BY BACK_NO ASC;
+
+--FROM절에 ALIAS를 설정한 경우 SELECT절이나 WHERE 절에서도 ALIAS로 사용해야 한다.
+--가독성과 일관성 측면에서 SELECT에 알리아스를 다 적어주는 것이 좋다.
+--소속팀의 전용구장 정보를 팀정보와 함께 출력
+SELECT T.TEAM_NAME, S.STADIUM_NAME
+FROM TEAM T JOIN STADIUM S ON T.STADIUM_ID = S.STADIUM_ID
 
 
 
