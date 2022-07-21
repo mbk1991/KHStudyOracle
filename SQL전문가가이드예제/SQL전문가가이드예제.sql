@@ -1,5 +1,6 @@
---SQL전문가가이드 예제
+0--SQL전문가가이드 예제
 
+-- # 220720
 --1.SELECT문
 
 --# DISTINCT 옵션과 디폴트인 ALL 옵션
@@ -287,15 +288,29 @@ ORDER BY BACK_NO ASC;
 --가독성과 일관성 측면에서 SELECT에 알리아스를 다 적어주는 것이 좋다.
 --소속팀의 전용구장 정보를 팀정보와 함께 출력
 SELECT T.TEAM_NAME, S.STADIUM_NAME
-FROM TEAM T JOIN STADIUM S ON T.STADIUM_ID = S.STADIUM_ID
+FROM TEAM T JOIN STADIUM S ON T.STADIUM_ID = S.STADIUM_ID;
 
 
 
+SELECT PLAYER_NAME, NATION
+       ,(SELECT ROUND(AVG(HEIGHT),1) FROM PLAYER P2
+         WHERE P1.NATION = P2.NATION)"평균키"
+FROM PLAYER P1;
+
+--NON EQUI JOIN
+--비등가조인: 두 테이블 간의 논리적인 연관관계를 가지고 있으나 칼럼값들이 서로 일치하지 않는 경우
+--            사용하는 조인이다.
+-- 두 테이블이 PK-FK 연관관계를 같거나 논리적으로 같은 값이 존재하면 '='연산자로 JOIN을 한다.
+--두 테이블간 컬럼값이 정확하게 일치하지 않는 경우  EQUI조인은 불가하며 비등가 조인으로 시도해볼 수 있다. 
+-- 데이터 모델에 따라 비등가조인이 불가한 경우도 있음.
+--비등가조인은 BETWEEN, 비교연산자 등으로 조인을 한다.
+
+SELECT A.ENAME, A.JOB. A.SAL, B.GRADE
+FROM EMP A, SALGRADE B
+WHERE A.SAL BETWEEN B.LOSAL AND B.HISAL;
 
 
-
-
-
+--# 220721
 
 
 
