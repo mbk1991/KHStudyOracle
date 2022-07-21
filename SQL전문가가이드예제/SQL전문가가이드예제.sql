@@ -305,27 +305,115 @@ FROM PLAYER P1;
 -- 데이터 모델에 따라 비등가조인이 불가한 경우도 있음.
 --비등가조인은 BETWEEN, 비교연산자 등으로 조인을 한다.
 
-SELECT A.ENAME, A.JOB. A.SAL, B.GRADE
+--# 220721
+CREATE TABLE SALGRADE(
+    GRADE NUMBER PRIMARY KEY,
+    LOSAL NUMBER,
+    HISAL NUMBER);
+INSERT INTO SALGRADE VALUES
+(1,700,1200);
+INSERT INTO SALGRADE VALUES
+(2,1201,1400);
+INSERT INTO SALGRADE VALUES
+(3,1401,2000);
+INSERT INTO SALGRADE VALUES
+(4,2001,3000);
+INSERT INTO SALGRADE VALUES
+(5,3001,9999);
+
+SELECT * FROM SALGRADE;
+COMMIT;
+
+SELECT  A.ENAME, A.JOB, A.SAL, B.GRADE
 FROM EMP A, SALGRADE B
 WHERE A.SAL BETWEEN B.LOSAL AND B.HISAL;
 
-
---# 220721
-
-
-
+SELECT ENAME, SAL, GRADE
+FROM EMP E  JOIN SALGRADE S
+ON E.SAL BETWEEN S.LOSAL AND S.HISAL;
 
 
+SELECT A.PLAYER_NAME AS 선수명,
+       A.POSITION AS 포지션,
+       B.REGION_NAME AS 연고지,
+       B.TEAM_NAME AS 팀명,
+       C.STADIUM_NAME AS 구장명
+FROM PLAYER A, TEAM B, STADIUM C
+WHERE A.TEAM_ID = B.TEAM_ID AND
+        B.STADIUM_ID = C.STADIUM_ID
+ORDER BY 선수명 ASC;
+
+--JOIN 결과가 참인 행들만  반환하는 INNER조인. (디폴트) JOIN에 실패한 행들은 결과에서 제외된다.
+--OUTER JOIN -JOIN 결과에 실패한 행들도 결과에 포함된다. 조인(매칭)되지 않는 부분은 NULL처리됨.
+--테이블1과 테이블2를 조인할 때 테이블 2에 조인할 데이터가 없어도 테이블1의 모든 데이터를 표시하고 싶은 경우.
+/*
+    아우터조인의 오라클 문법
+    FROM TABLE1, TABLE2
+    WHERE TABLE1.칼럼명(+) = TABLE2.칼럼명
+여기서 주의할 점은 이 예시는 RIGHT OUTER 조인이라는 것. (+)붙은 쪽이 NULL처리되고 다른쪽의 데이터가 모두 표시된다.
+*/
+
+SELECT * 
+FROM STADIUM S, TEAM T
+WHERE S.STADIUM_ID = T.STADIUM_ID(+)
+ORDER BY HOMETEAM_ID ASC;
+
+--DEPT와EMP를 조인하되 사원이 없는 부서정보도 같이 출력하도록
+SELECT *
+FROM DEPT D LEFT JOIN EMP E ON  D.DEPTNO = E.DEPTNO;
+
+--조인이 필요한 이유는 정규화에서부터 출발한다.
+--불필요한 데이터의 정합성(모순이 없는것)을 확보하고 이상현상(ANOMARY)발생을 피하기 위해
+--테이블을 분할하여 생성한다. 테이블 하나에 모든 데이터가 있는 경우 데이터의 모순이 생길 수 있으며
+--추가, 수정, 삭제하는 작업에 더 큰 노력이 들어간다. 규모가 큰 테이블에서 값을 찾아야 하므로 조회도 오래걸림
+--테이블을 분리하면 이러한 문제를 해소할 수 있지만 테이블이 분리되었기 때문에  테이블 간의 논리적인 연관관계가 필요하다.
+--이러한 관계를 통해 다양한 데이터를 출력하는 것이 바로 조인인 것이다.
+--관계형 데이터베이스의 큰 장점인 조인을 잘못 기술하면 시스템 자원낭비, 응답시간 지연의 원인이 된다.
+
+--8. 표준조인
+--INNER JOIN
+--NATURAL JOIN
+--USING 조건절
+--ON 조건절
+--CROSS JOIN
+--OUTER JOIN
+
+--WHERE절에서 JOIN조건을 표기하는 전통방식 -> FROM 절에서 표기하는 방식. ON조건절, USINT조건절
+--NATURAL조인은 두 테이블 간 동일한 이름을 갖는 모든 칼럼들에 대해 EQUI조인을 수행한다.
+--NATURAL JOIN이 명시되면 조인 조건은 정의할 수 없다. 컬럼명과 타입이 모두 같을 때 가능하다.
 
 
+--INNER조인과 NATURAL조인의 차이 비교 예제
+CREATE TABLE DEPT_TEMP AS SELECT * FROM DEPT;
+UPDATE DEPT_TEMP
+SET DNAME = 'CONSULTING'
+WHERE DNAME = 'RESEARCH';
+UPDATE DEPT_TEMP
+SET DNAME = 'MARKETING'
+WHERE DNAME = 'SALES';
 
+SELECT * FROM DEPT;
+SELECT * FROM DEPT_TEMP;
 
+SELECT * FROM DEPT A NATURAL JOIN DEPT_TEMP B;
+SELECT * FROM DEPT A JOIN DEPT_TEMP B 
+ON A.DEPTNO = B.DEPTNO
+AND A.DNAME = B.DNAME
+AND A.LOC = B.LOC;
 
+SELECT * FROM DEPT A INNER JOIN DEPT_TEMP B
+USING(DNAME);
 
+--USING 조건절을 이용한 등가조인(EQUI JOIN)과 네츄럴조인에서 조인되는 컬럼을
+--ALIAS나 테이블명을 구분하여 지칭할 수 없다.
 
+--CROSSJOIN M*N으로 집합연산자의 PRODUCT의 개념. 생길 수 있는 모든 데이터의 조합
+--일반적으로 잘 사용하지 않는다.
 
-
-
+--OUTER조인
+--전통방식인 (+)방식은 불편한 점이 많았다.
+--ANSI/ISO 방식 문법으로 사용한다. USING절, ON절
+--LEFT JOIN RIGHT JOIN FULL JOIN
 
 
 

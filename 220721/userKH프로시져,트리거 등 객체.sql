@@ -523,3 +523,6 @@ SELECT * FROM PRODUCT;
 --2. 사원변경내역을 기록하는 emp_log테이블을 생성하고, 사원테이블의 insert, update가 있을 때마다 신규데이터를 기록하는 트리거를 생성하라.
 --로그테이블명 emp_log : 컬럼 log_no(시퀀스객체로부터 채번함. pk), log_date(기본값 sysdate, not null), emp테이블의 모든 컬럼
 --트리거명 trg_emp_log
+
+
+SELECT * FROM ROLE_SYS_PRIVS WHERE ROLE='DBA';
